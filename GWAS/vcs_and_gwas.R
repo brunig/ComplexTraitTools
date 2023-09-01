@@ -5,12 +5,13 @@ library(mvnpermute)
 #library(NAM)
 #library(milorGWAS)
 
-source('/home/jbloom/Dropbox/code/ComplexTraitTools/GWAS/R/preprocessing.R')
-source('/home/jbloom/Dropbox/code/ComplexTraitTools/GWAS/R/dofastLMM_mvnpermute.R')
+source('/Users/kruglyakbws/Documents/Git/JoshGWAS/Untitled/ComplexTraitTools/GWAS/R/preprocessing.R')
+source('/Users/kruglyakbws/Documents/Git/JoshGWAS/Untitled/ComplexTraitTools/GWAS/R/dofastLMM_mvnpermute.R')
 
-pheno=readRDS('/data/yeast/Colonies/2022-09-04/AreaPhenotypes_GJ-SDM.rds')
+pheno=readRDS('/Users/kruglyakbws/Desktop/yeast/JoshShare/AreaPhenotypes_GJ-SDM.rds')
     
-path.to.gwas.data='/data/yeast/1002genomes/1011GWASMatrix/'
+
+path.to.gwas.data='/Users/kruglyakbws/Desktop/yeast/1002genomes/1011GWASMatrix'
 
 #get gwas variants from bed/bim/bam
 GWAS.variants=getGWASvariants(path.to.gwas.data)
@@ -48,7 +49,7 @@ for(p in colnames(pheno)[-c(1,2)]){
    names(ry)=rownames(GWAS.variants$g)
    #-------------------------------------------------
 
-   gwas.results[[p]]=dofastLMM_mvnpermute(y=ry,X=NULL,GWAS.variants, svdA=svdA, nperm=500, REML=T) 
+   gwas.results[[p]]=dofastLMM_mvnpermute(y=ry,X=NULL,GWAS.variants, svdA=svdA, nperm=5, REML=T) #500
 }
 
 
@@ -121,5 +122,5 @@ t(sapply(rrh2.raw,function(x) x$sigma))/(sapply(rrh2.raw, function(x) sum(x$sigm
 t(sapply(rrh2.sqrt,function(x) x$sigma))/(sapply(rrh2.sqrt, function(x) sum(x$sigma)))
 
 #-------------------------------------------------------------------------------------------
-
-
+#example of how to generate the significantly colored Manhattan Plot
+plot(gwas.results$GJonly_s.area_rep1$REML.nlp, col= gwas.results$GJonly_s.area_rep1$REMLsig+1)
